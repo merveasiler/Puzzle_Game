@@ -10,9 +10,18 @@ class Puzzle {
 	Puzzle* bottom_left;
 	Puzzle* bottom_right;
 
+	int size;
+	int start_x, start_y;
+
+	const Piece* piece;
+
+
 public:
-	Puzzle();
+	Puzzle(int size, int start_x, int start_y);
 	~Puzzle();
-	Puzzle crop(int[3], int[3]) const ;
-	void patch(Puzzle);
+	Puzzle(const Puzzle& puzzle);
+	Puzzle& operator=(const Puzzle& puzzle);
+	void placePiece(const Piece& piece, int coords[2]);
+	Puzzle crop(int from[2], int to[2]) const ;
+	void patch(Puzzle puzzle);
 };

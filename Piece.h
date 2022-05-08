@@ -7,7 +7,7 @@ class Piece {
 	Edge* edges[4];	// left bottom right top
 
 public:
-	Piece(Edge* edges);
+	Piece(Edge* edges[4]);
 	~Piece();
 	
 };

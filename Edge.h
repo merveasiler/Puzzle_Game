@@ -8,57 +8,68 @@ using namespace std;
 class Edge {
 
 protected:
-	char identity;
+	int id;
+	char identity_password;
 	Edge* matchingEdge;
 
 public:
-	Edge(char identity);
+	Edge(int id, char identity_password);
 	~Edge();
-	virtual bool matchWith(char code) = 0;
+	int getId() const;
+	virtual Edge* clone() const = 0;
+	/*
+	virtual bool matchWith(StraightEdge& edge) = 0;
+	virtual bool matchWith(FemaleEdge& edge) = 0;
+	virtual bool matchWith(MaleEdge& edge) = 0;
+	virtual bool matchWith(CompositeEdge& edge) = 0;
+	*/
 	virtual bool matchWith(Edge& edge);
+	virtual bool matchWithHelper(char identity_password) = 0;	// double dispatch-1
+	bool matchWithHelper(Edge& edge);							// double dispatch-2
 	virtual void breakMatch();
+	Edge* getMatchingEdge() const;
 };
 
 class StraightEdge : public Edge {
 
-protected:
-	bool matchWith(char code);
+	bool matchWithHelper(char identity_password);
 
 public:
-	StraightEdge();
+	StraightEdge(int id);
 	~StraightEdge();
+	Edge* clone() const;
 };
 
 class FemaleEdge : public Edge {
 
-protected:
-	bool matchWith(char code);
+	bool matchWithHelper(char identity_password);
 
 public:
-	FemaleEdge();
+	FemaleEdge(int id);
 	~FemaleEdge();
+	Edge* clone() const;
 };
 
 class MaleEdge : public Edge {
 
-protected:
-	bool matchWith(char code);
+	bool matchWithHelper(char identity_password);
 
 public:
-	MaleEdge();
+	MaleEdge(int id);
 	~MaleEdge();
+	Edge* clone() const;
 };
 
 class CompositeEdge : public Edge {
 	vector<Edge*> edges;
-	unsigned int matchIndex;
+	int matchIndex;
 
-protected:
-	bool matchWith(char code);
+	bool matchWithHelper(char identity_password);
 
 public:
-	CompositeEdge();
+	CompositeEdge(int id);
 	~CompositeEdge();
+	Edge* clone() const;
 	bool matchWith(Edge& edge);
 	void breakMatch();
 	CompositeEdge* addEdge(Edge* edge);
