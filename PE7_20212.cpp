@@ -3,8 +3,66 @@
 #include "Puzzle.h"
 
 #include <iostream>
+#include <sstream>
+
+ostream& operator<< (ostream& os, const Puzzle& puzzle) {
+
+	if (puzzle.piece && !puzzle.top_left && !puzzle.bottom_left && !puzzle.bottom_right && !puzzle.top_right)
+		os << puzzle.piece;
+	else {
+		string subpart = "";
+		for (int lr = 0; lr < 2; lr++) {
+			ostream& objOstream_left = cout;
+			Puzzle* left = NULL, * right = NULL;
+			if (lr == 0) {
+				left = puzzle.top_left;
+				right = puzzle.top_right;
+			}
+			else {
+				left = puzzle.bottom_left;
+				right = puzzle.bottom_right;
+			}
+
+			if (left)
+				objOstream_left << *left << "\n";
+			else
+				objOstream_left << "\\  /" << "\n" << " \\/ " << "\n" << " /\\ " << "\n" << "/  \\" << "\n\n";
+
+			ostream& objOstream_right = cout;
+			if (right)
+				objOstream_right << *right << "\n";
+			else
+				objOstream_right << "\\  /" << "\n" << " \\/ " << "\n" << " /\\ " << "\n" << "/  \\" << "\n\n";
+
+			ostringstream oss_left, oss_right;
+			oss_left << objOstream_left.rdbuf();
+			oss_right << objOstream_right.rdbuf();
+			string objString_left = oss_left.str(), objString_right = oss_right.str();
+			for (int i = 0; i < 4; i++) {
+				string subpart1_left = objString_left.substr(0, objString_left.find("\n"));
+				string subpart2_left = objString_left.substr(objString_left.find("\n") + 1);
+				string subpart1_right = objString_right.substr(0, objString_right.find("\n"));
+				string subpart2_right = objString_right.substr(objString_right.find("\n") + 1);
+				subpart += subpart1_left + "  " + subpart1_right + "\n";
+				objString_left = subpart2_left;
+				objString_right = subpart2_right;
+			}
+			subpart += "\n";
+		}
+		os << subpart;
+	}
+	return os;
+}
 
 int main() {
+
+	//main1();
+	main2();
+
+	return 0;
+}
+
+void main1() {
 
 	Edge* edge1 = new FemaleEdge(123456);
 	Edge* edge2 = new MaleEdge(432157);
@@ -74,5 +132,8 @@ int main() {
 	delete edge12;
 	delete edge13;
 
-	return 0;
+}
+
+void main2() {
+
 }

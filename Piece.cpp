@@ -15,3 +15,9 @@ Piece::~Piece() {
 	}
 }
 
+ostream& operator<< (ostream& os, const Piece& piece) {
+
+	for (int i = 0; i < 4; i++)
+		os << piece.edges[i]->getId() << "\n";
+	return os;
+}

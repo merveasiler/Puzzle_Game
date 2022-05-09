@@ -9,5 +9,5 @@ class Piece {
 public:
 	Piece(Edge* edges[4]);
 	~Piece();
-	
+	friend ostream& operator<< (ostream& os, const Piece& piece);
 };

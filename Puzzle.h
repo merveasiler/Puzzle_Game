@@ -24,4 +24,6 @@ public:
 	void placePiece(const Piece& piece, int coords[2]);
 	Puzzle crop(int from[2], int to[2]) const ;
 	void patch(Puzzle puzzle);
+
+	friend ostream& operator<< (ostream& os, const Puzzle& puzzle);
 };

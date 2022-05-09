@@ -1,6 +1,5 @@
 #include "Edge.h"
 
-#include <iostream>
 /* ************************ Edge ************************ */
 Edge::Edge(int id, char identity_password) {
 
