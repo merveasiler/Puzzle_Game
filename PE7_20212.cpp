@@ -7,52 +7,60 @@
 
 ostream& operator<< (ostream& os, const Puzzle& puzzle) {
 
-	if (puzzle.piece && !puzzle.top_left && !puzzle.bottom_left && !puzzle.bottom_right && !puzzle.top_right)
-		os << puzzle.piece;
+	if (puzzle.size == 1) {
+		if (puzzle.piece)
+			os << *puzzle.piece << "\n";
+		else
+			os << "\\  /" << "\n" << " \\/ " << "\n" << " /\\ " << "\n" << "/  \\" << "\n" << "\n";
+	}
 	else {
 		string subpart = "";
-		for (int lr = 0; lr < 2; lr++) {
-			ostream& objOstream_left = cout;
-			Puzzle* left = NULL, * right = NULL;
-			if (lr == 0) {
-				left = puzzle.top_left;
-				right = puzzle.top_right;
-			}
+		ostringstream objOstream[4] = { ostringstream(""), ostringstream(""), ostringstream(""), ostringstream("") };
+		Puzzle* subpuzzles[4] = { puzzle.top_left, puzzle.bottom_left, puzzle.top_right, puzzle.bottom_right };
+		
+		for (int s = 0; s < 4; s++) {	// top_left bottom_left top_right bottom_right
+			if (subpuzzles[s])
+				objOstream[s] << *subpuzzles[s];
 			else {
-				left = puzzle.bottom_left;
-				right = puzzle.bottom_right;
+				int subsize = puzzle.size / 2;
+				for (int i = 0; i < subsize; i++) {
+					for (int j = 0; j < subsize; j++)
+						objOstream[s] << "\\  /" << "  ";
+					objOstream[s] << "\n";
+					for (int j = 0; j < subsize; j++)
+						objOstream[s] << " \\/ " << "  ";
+					objOstream[s] << "\n";
+					for (int j = 0; j < subsize; j++)
+						objOstream[s] << " /\\ " << "  ";
+					objOstream[s] << "\n";
+					for (int j = 0; j < subsize; j++)
+						objOstream[s] << "/  \\" << "  ";
+					objOstream[s] << "\n" << "\n";
+				}
 			}
-
-			if (left)
-				objOstream_left << *left << "\n";
-			else
-				objOstream_left << "\\  /" << "\n" << " \\/ " << "\n" << " /\\ " << "\n" << "/  \\" << "\n\n";
-
-			ostream& objOstream_right = cout;
-			if (right)
-				objOstream_right << *right << "\n";
-			else
-				objOstream_right << "\\  /" << "\n" << " \\/ " << "\n" << " /\\ " << "\n" << "/  \\" << "\n\n";
-
-			ostringstream oss_left, oss_right;
-			oss_left << objOstream_left.rdbuf();
-			oss_right << objOstream_right.rdbuf();
-			string objString_left = oss_left.str(), objString_right = oss_right.str();
-			for (int i = 0; i < 4; i++) {
-				string subpart1_left = objString_left.substr(0, objString_left.find("\n"));
-				string subpart2_left = objString_left.substr(objString_left.find("\n") + 1);
-				string subpart1_right = objString_right.substr(0, objString_right.find("\n"));
-				string subpart2_right = objString_right.substr(objString_right.find("\n") + 1);
-				subpart += subpart1_left + "  " + subpart1_right + "\n";
-				objString_left = subpart2_left;
-				objString_right = subpart2_right;
-			}
-			subpart += "\n";
 		}
-		os << subpart;
+
+		stringstream ss_left, ss_right;
+		ss_left << objOstream[0].str() << objOstream[1].str();	// top_left, bottom_left
+		ss_right << objOstream[2].str() << objOstream[3].str();	// top_right, bottom_right
+		string s_left = ss_left.str(), s_right = ss_right.str();
+		
+		for (int i = 0; i < (puzzle.size)*4 + (puzzle.size - 1); i++) {
+			string subpart_left = s_left.substr(0, s_left.find("\n"));
+			s_left = s_left.substr(s_left.find("\n") + 1);
+			string subpart_right = s_right.substr(0, s_right.find("\n"));
+			s_right = s_right.substr(s_right.find("\n") + 1);
+			subpart += subpart_left + subpart_right + "\n";
+		}
+
+		os << subpart << "\n";
 	}
+
 	return os;
 }
+
+void main1();
+void main2();
 
 int main() {
 
@@ -136,4 +144,41 @@ void main1() {
 
 void main2() {
 
+	StraightEdge edge11(1111);
+	FemaleEdge edge12(2222);
+	FemaleEdge edge13(3333);
+	MaleEdge edge14(4444);
+	Edge* edges1[4] = {&edge11, &edge12, &edge13, &edge14};
+
+	Piece* piece1 = new Piece(edges1);
+	Piece* piece2 = new Piece(edges1);
+	Piece* piece3 = new Piece(edges1);
+	Piece* piece4 = new Piece(edges1);
+	//cout << "Piece:\n" << *piece1 << "\n";
+	
+	Puzzle* puzzle = new Puzzle(8, 0, 0);
+	int location1[2] = {6, 5};
+	puzzle->placePiece(*piece1, location1);
+
+	int location2[2] = { 2, 1 };
+	puzzle->placePiece(*piece2, location2);
+
+	int location3[2] = { 3, 3 };
+	puzzle->placePiece(*piece3, location3);
+
+	int location4[2] = { 0, 7 };
+	puzzle->placePiece(*piece4, location4);
+
+	int loc1[2] = { 2, 2 };
+	int loc2[2] = { 3, 3 };
+	Puzzle cropped_part = puzzle->crop(loc1, loc2);
+	cout << cropped_part;
+	cout << "MERVE\n";
+	cout << *puzzle;
+
+	delete piece1;
+	delete piece2;
+	delete piece3;
+	delete piece4;
+	delete puzzle;
 }

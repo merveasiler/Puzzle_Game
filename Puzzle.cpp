@@ -68,12 +68,14 @@ Puzzle& Puzzle::operator=(const Puzzle& puzzle) {
 
 void Puzzle::placePiece(const Piece& piece, int coords[2]) {
 
-	if (size == 1)
+	if (size == 1) {
 		this->piece = &piece;
+		return;
+	}
 
 	int subsize = size / 2;
-	if (coords[0] < start_x + subsize) {
-		if (coords[1] < start_y + subsize) {
+	if (coords[1] < start_x + subsize) {
+		if (coords[0] < start_y + subsize) {
 			if (top_left == NULL)
 				top_left = new Puzzle(subsize, start_x, start_y);
 			top_left->placePiece(piece, coords);
@@ -85,7 +87,7 @@ void Puzzle::placePiece(const Piece& piece, int coords[2]) {
 		}
 	}
 	else {
-		if (coords[1] < subsize) {
+		if (coords[0] < start_y + subsize) {
 			if (top_right == NULL)
 				top_right = new Puzzle(subsize, start_x + subsize, start_y);
 			top_right->placePiece(piece, coords);
@@ -101,19 +103,19 @@ void Puzzle::placePiece(const Piece& piece, int coords[2]) {
 
 Puzzle Puzzle::crop(int from[2], int to[2]) const {
 
-	if (this->start_x == from[0] && this->start_y == from[1] && this->start_x + size - 1 == to[0] && this->start_y + size - 1 == to[1])
+	if (this->start_x == from[1] && this->start_y == from[0] && this->start_x + size - 1 == to[1] && this->start_y + size - 1 == to[0])
 		return *this;
 
 	int subsize = size / 2;
 
-	if (from[0] < this->start_x + subsize) {
-		if (from[1] < this->start_y + subsize)
+	if (from[1] < this->start_x + subsize) {
+		if (from[0] < this->start_y + subsize)
 			return top_left->crop(from, to);
 		else
 			return bottom_left->crop(from, to);
 	}
 	else {
-		if (from[1] < this->start_y + subsize)
+		if (from[0] < this->start_y + subsize)
 			return top_right->crop(from, to);
 		else
 			return bottom_right->crop(from, to);
