@@ -38,12 +38,18 @@ Puzzle::Puzzle(const Puzzle& puzzle) {
 	this->start_x = puzzle.start_x;
 	this->start_y = puzzle.start_y;
 
-	this->piece = puzzle.piece;
+	if (puzzle.piece)
+		this->piece = new Piece(*puzzle.piece);
 
-	this->top_left = puzzle.top_left;
-	this->top_right = puzzle.top_right;
-	this->bottom_left = puzzle.bottom_left;
-	this->bottom_right = puzzle.bottom_right;
+	if (puzzle.top_left)
+		this->top_left = new Puzzle(*puzzle.top_left);
+	if (puzzle.top_right)
+		this->top_right = new Puzzle(*puzzle.top_right);
+	if (puzzle.bottom_left)
+		this->bottom_left = new Puzzle(*puzzle.bottom_left);
+	if (puzzle.bottom_right)
+		this->bottom_right = new Puzzle(*puzzle.bottom_right);
+
 }
 
 Puzzle& Puzzle::operator=(const Puzzle& puzzle) {

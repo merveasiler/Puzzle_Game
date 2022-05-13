@@ -15,6 +15,12 @@ Piece::~Piece() {
 	}
 }
 
+Piece::Piece(const Piece& piece) {
+
+	for (int i = 0; i < 4; i++)
+		this->edges[i] = piece.edges[i]->clone();
+}
+
 ostream& operator<< (ostream& os, const Piece& piece) {
 
 	for (int i = 0; i < 4; i++)

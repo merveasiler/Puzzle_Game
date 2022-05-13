@@ -171,9 +171,10 @@ void main2() {
 
 	int loc1[2] = { 2, 2 };
 	int loc2[2] = { 3, 3 };
+	cout << "before crop\n";
 	Puzzle cropped_part = puzzle->crop(loc1, loc2);
+	cout << "after crop\n";
 	cout << cropped_part;
-	cout << "MERVE\n";
 	cout << *puzzle;
 
 	delete piece1;
