@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Edge.h" />
+    <ClInclude Include="Exception.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Puzzle.h" />
   </ItemGroup>

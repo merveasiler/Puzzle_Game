@@ -72,8 +72,8 @@ int main() {
 
 void main1() {
 
-	Edge* edge1 = new FemaleEdge(123456);
-	Edge* edge2 = new MaleEdge(432157);
+	Edge* edge1 = new InwardsEdge(123456);
+	Edge* edge2 = new OutwardsEdge(432157);
 	Edge* edge3 = new StraightEdge(513246);
 	Edge* edge4 = new StraightEdge(654327);
 
@@ -92,8 +92,8 @@ void main1() {
 	edge3->breakMatch();
 	
 	// CompositeEdge
-	Edge* edge5 = new MaleEdge(562258);
-	Edge* edge6 = new FemaleEdge(957585);
+	Edge* edge5 = new OutwardsEdge(562258);
+	Edge* edge6 = new InwardsEdge(957585);
 
 	CompositeEdge* edge7 = new CompositeEdge(87653487);
 	CompositeEdge* edge8 = new CompositeEdge(15121304);
@@ -105,10 +105,10 @@ void main1() {
 	cout << edge8->getMatchingEdge()->getId() << endl;					// 87653487
 	edge8->breakMatch();
 
-	Edge* edge9 = new MaleEdge(561258);
-	Edge* edge10 = new FemaleEdge(957515);
+	Edge* edge9 = new OutwardsEdge(561258);
+	Edge* edge10 = new InwardsEdge(957515);
 	Edge* edge11 = new StraightEdge(847199);
-	Edge* edge12 = new FemaleEdge(448486);
+	Edge* edge12 = new InwardsEdge(448486);
 
 	cout << (edge7->matchWith(*edge10) ? "true" : "false") << endl;		// false
 	edge8->addEdge(edge10);
@@ -145,15 +145,16 @@ void main1() {
 void main2() {
 
 	StraightEdge edge11(1111);
-	FemaleEdge edge12(2222);
-	FemaleEdge edge13(3333);
-	MaleEdge edge14(4444);
+	InwardsEdge edge12(2222);
+	InwardsEdge edge13(3333);
+	OutwardsEdge edge14(4444);
 	Edge* edges1[4] = {&edge11, &edge12, &edge13, &edge14};
 
 	Piece* piece1 = new Piece(edges1);
 	Piece* piece2 = new Piece(edges1);
 	Piece* piece3 = new Piece(edges1);
 	Piece* piece4 = new Piece(edges1);
+	Piece* piece5 = new Piece(edges1);
 	//cout << "Piece:\n" << *piece1 << "\n";
 	
 	Puzzle* puzzle = new Puzzle(8, 0, 0);
@@ -169,17 +170,28 @@ void main2() {
 	int location4[2] = { 0, 7 };
 	puzzle->placePiece(*piece4, location4);
 
+	int location5[2] = { 4, 4 };
+	puzzle->placePiece(*piece5, location5);
+
 	int loc1[2] = { 2, 2 };
 	int loc2[2] = { 3, 3 };
-	cout << "before crop\n";
 	Puzzle cropped_part = puzzle->crop(loc1, loc2);
-	cout << "after crop\n";
 	cout << cropped_part;
 	cout << *puzzle;
+
+	Puzzle* patch = new Puzzle(2, 4, 3);
+	Piece* piece6 = new Piece(edges1);
+	int location6[2] = { 5, 3 };
+	patch->placePiece(*piece6, location6);
+	puzzle->patch(*patch);
+	cout << endl << *puzzle;
+	delete patch;
 
 	delete piece1;
 	delete piece2;
 	delete piece3;
 	delete piece4;
+	delete piece5;
+	delete piece6;
 	delete puzzle;
 }
